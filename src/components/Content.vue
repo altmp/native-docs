@@ -360,6 +360,7 @@ export default class Content extends Vue {
       display: flex;
       min-width: 200px;
       width: 330px;
+      margin-right: 20px;
 
       .history-hashes-list {
         padding-bottom: 20px;
