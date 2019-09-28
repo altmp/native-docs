@@ -64,7 +64,7 @@
             <div class="section-header">Description</div>
 
             <pre v-if="description !== undefined">{{ description }}</pre>
-            <span v-else class="no-description">No description</span>
+            <span v-if="description === undefined" class="no-description">No description</span>
           </div>
         </div>
         <div class="content-hash-history">
@@ -80,12 +80,6 @@
           </div>
         </div>
       </div>
-      <!-- <span v-for="(arg, i) in args" :key="i" class="function-arg">
-        <span class="function-arg-name">{{ arg.name }}</span>
-        <span>: </span>
-        <span class="function-arg-type">{{ arg.type }}</span>
-        <span>{{ (i != (args.length - 1)) ? ',&nbsp;' : '' }}</span>
-      </span> -->
     </div>
   </div>
 </template>
