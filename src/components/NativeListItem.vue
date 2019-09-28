@@ -28,7 +28,11 @@ export default class NativeListItem extends Vue {
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  margin-bottom: 5px;
+  margin-bottom: 7px;
+
+  &.router-link-exact-active {
+    font-weight: 700;
+  }
 
   .quality-circle {
     display: flex;
@@ -51,6 +55,7 @@ export default class NativeListItem extends Vue {
   }
 
   .native-name {
+    font-size: 18px;
     margin-left: 5px;
   }
 }
