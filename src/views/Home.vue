@@ -1,18 +1,31 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <nav-bar/>
+    <native-content v-if="nativeHash" :hash="nativeHash"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import NavBar from '@/components/Navigation.vue';
+import NativeContent from '@/components/Content.vue';
 
 @Component({
   components: {
-    HelloWorld,
-  },
+    NavBar,
+    NativeContent
+  }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  private get nativeHash() {
+    return this.$route.params.hash;
+  }
+}
 </script>
+
+<style lang="scss" scoped>
+.home {
+  display: flex;
+  flex: 1 1;
+}
+</style>
