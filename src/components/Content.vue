@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div v-if="nativeData" class="content">
     <div class="doc-header">
       <div class="quality-circle good"></div>
       <div class="function-type">
@@ -77,17 +77,8 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 export default class Content extends Vue {
   @Prop() private hash!: string;
 
-  private nativeData: any = {};
-
-  @Watch('hash')
-  private onHashChanged(newHash: string, oldHash: string) {
-    if (this.$store.state.nativesByHash[newHash] !== undefined) {
-      this.nativeData = this.$store.state.nativesByHash[newHash];
-    }
-  }
-
-  private mounted() {
-    this.nativeData = this.$store.state.nativesByHash[this.hash];
+  private get nativeData() {
+    return this.$store.state.nativesByHash[this.hash];
   }
 
   private get category() {
@@ -138,7 +129,6 @@ export default class Content extends Vue {
   display: flex;
   flex: 1 1;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
   box-sizing: border-box;
   padding: 20px 20px 0 20px;
   flex-direction: column;

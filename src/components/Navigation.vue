@@ -32,7 +32,6 @@ export default class Navigation extends Vue {
   width: 300px;
   height: 100%;
   background: rgba(196, 196, 196, 0.2);
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
 }
