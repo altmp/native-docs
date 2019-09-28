@@ -32,7 +32,6 @@ export default class Navigation extends Vue {
   width: 300px;
   height: 100%;
   background: rgba(196, 196, 196, 0.2);
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
 }
@@ -80,11 +79,10 @@ export default class Navigation extends Vue {
 }
 
 .natives-list::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 .natives-list::-webkit-scrollbar-thumb {
-  border-radius: 10px;
   background-color: #AAA;
   min-height: 40px;
 }

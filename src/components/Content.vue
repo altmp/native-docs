@@ -8,7 +8,6 @@
     </div>
     <div class="doc-data-out">
       <div class="doc-data-in">
-        <div class="content-placeholder"></div>
         <div class="content-native-info">
           <div class="summary-info">
             <div class="category-name">{{ categoryLowerCase }}</div>
@@ -20,7 +19,7 @@
           <div class="description-section">
             <div class="section-header">Declaration</div>
             <div class="code">
-              <span class="function-color">function </span>
+              <span class="function-color">function&nbsp;</span>
               <span class="function-name">{{ name }}</span>
               <span>(</span>
               <span v-for="(arg, i) in args" :key="i" class="function-arg">
@@ -29,27 +28,49 @@
                 <span class="function-arg-type">{{ arg.type }}</span>
                 <span>{{ (i != (args.length - 1)) ? ',&nbsp;' : '' }}</span>
               </span>
-              <span>): </span>
+              <span>):&nbsp;</span>
               <span class="function-result-type">{{ resultType }}</span>
             </div>
           </div>
           <div v-if="args.length > 0" class="description-section">
             <div class="section-header">Arguments</div>
-
+            <div v-for="(arg, i) in args" :key="i" class="arg-data">
+              <div class="arg-declaration">
+                <span class="arg-name">{{ arg.name }}</span>
+                <span>: </span>
+                <span class="function-arg-type">{{ arg.type }}</span>
+              </div>
+              <div class="arg-description">
+                <span v-if="arg.description !== undefined" class="arg-description-text"></span>
+                <span v-if="arg.description === undefined" class="arg-description-text empty">No description</span>
+              </div>
+            </div>
           </div>
           <div v-if="resultType !== 'void'" class="description-section">
             <div class="section-header">Result</div>
-
+            <div class="arg-data">
+              <div class="arg-declaration">
+                <span class="arg-name">result</span>
+                <span>: </span>
+                <span class="function-arg-type">{{ resultType }}</span>
+              </div>
+              <div class="arg-description">
+                <span v-if="resultDescription !== undefined" class="arg-description-text"></span>
+                <span v-else class="arg-description-text empty">No description</span>
+              </div>
+            </div>
           </div>
           <div class="description-section">
             <div class="section-header">Description</div>
 
+            <pre v-if="description !== undefined">{{ description }}</pre>
+            <span v-else class="no-description">No description</span>
           </div>
         </div>
         <div class="content-hash-history">
           <div class="content-placeholder"></div>
           <div class="hash-history">
-            <div class="history-title">History</div>
+            <div class="history-title">Hashes</div>
             <div class="history-hashes-list">
               <div v-for="(hist, i) in hashesHistory" :key="i" class="hashes-list-item">
                 <div class="version-ellipse">{{ hist.version }}</div>
@@ -58,7 +79,6 @@
             </div>
           </div>
         </div>
-        <div class="content-placeholder"></div>
       </div>
       <!-- <span v-for="(arg, i) in args" :key="i" class="function-arg">
         <span class="function-arg-name">{{ arg.name }}</span>
@@ -118,9 +138,23 @@ export default class Content extends Vue {
     return this.nativeData ? this.nativeData.results : '';
   }
 
+  private get resultDescription() {
+    return this.nativeData.resultDescription ? this.nativeData.resultDescription : undefined;
+  }
+
+  private get description() {
+    return this.nativeData ? this.nativeData.comment : undefined;
+  }
+
   private get hashesHistory() {
     const history = [];
     if (this.nativeData && this.nativeData.hashes !== undefined) {
+      if (this.nativeData.jhash && this.nativeData.jhash.length > 0) {
+        history.unshift({
+          version: 'joaat',
+          hash: this.nativeData.jhash
+        });
+      }
       for (const version in this.nativeData.hashes) {
         history.unshift({
           version,
@@ -138,9 +172,8 @@ export default class Content extends Vue {
   display: flex;
   flex: 1 1;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
   box-sizing: border-box;
-  padding: 20px 20px 0 20px;
+  padding: 20px 0 0 20px;
   flex-direction: column;
 
   .function-type {
@@ -169,11 +202,15 @@ export default class Content extends Vue {
   }
 
   .function-arg span{
-    word-wrap: break-word;
+    white-space: nowrap;
   }
 
   .code {
-    display: block;
+    font-family: monospace;
+    font-size: 1.2rem;
+
+    display: inline-flex;
+    flex-wrap: wrap;
     background: #292B36;
     border: 1px solid rgba(136, 136, 136, 0.5);
     box-sizing: border-box;
@@ -182,6 +219,8 @@ export default class Content extends Vue {
     box-sizing: border-box;
     padding: 5px;
     text-align: start;
+    word-wrap: break-word;
+    margin-top: 10px;
   }
 
   .doc-header {
@@ -224,6 +263,17 @@ export default class Content extends Vue {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    box-sizing: border-box;
+    justify-content: center;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #AAA;
+      min-height: 40px;
+    }
 
     .content-placeholder {
       display: flex;
@@ -238,7 +288,7 @@ export default class Content extends Vue {
 
       .divider {
         margin: 20px 0 20px 0;
-        height: 2px;
+        min-height: 2px;
         background: rgba(255, 255, 255, 0.05);
       }
 
@@ -248,12 +298,38 @@ export default class Content extends Vue {
         align-items: flex-start;
         margin-bottom: 30px;
 
+        pre {
+          white-space: pre-wrap;
+          font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+        }
+
         .section-header {
           font-style: normal;
           font-weight: bold;
           font-size: 32px;
           color: #FFFFFF;
-          margin-bottom: 10px;
+        }
+
+        .arg-data {
+          display: flex;
+          flex-direction: column;
+
+          .arg-declaration {
+            font-size: 24px;
+            margin-bottom: 5px;
+            margin-top: 10px;
+          }
+
+          .arg-description-text {
+            text-align: start;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+          }
+
+          .empty {
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.5);
+          }
         }
       }
 
@@ -291,12 +367,19 @@ export default class Content extends Vue {
 
       .empty {
         font-style: italic;
+        color:rgba(255, 255, 255, 0.5);
       }
     }
+
     .content-hash-history {
       display: flex;
       min-width: 200px;
       width: 330px;
+
+      .history-hashes-list {
+        padding-bottom: 20px;
+        box-sizing: border-box;
+      }
 
       .history-title {
         font-style: normal;
