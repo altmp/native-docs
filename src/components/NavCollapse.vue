@@ -4,7 +4,7 @@
       <div :class="{triangle: true, 'triangle-opened': opened}"></div>
       <div class="name">{{ name }}</div>
     </div>
-    <div :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
+    <div v-if="isOpened" :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
       <native-list-item v-for="nativeName in nativeNames" :key="nativeName.key" :name="nativeName.name" :quality="nativeName.quality" :category="name" :hash="nativeName.key"/>
     </div>
   </div>
