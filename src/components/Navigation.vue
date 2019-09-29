@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="find-input">
       <input type="text" placeholder="Search natives" v-model="searchStr"/>
-      <i class="icon-cancel" @click="searchStr = ''" />
+      <i v-show="searchStr.length > 0" class="icon-cancel" @click="searchStr = ''" />
     </div>
 
     <div class="natives-list-out">
