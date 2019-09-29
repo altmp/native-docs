@@ -1,7 +1,10 @@
 <template>
   <div v-if="nativeData" class="content">
     <div class="doc-header">
-      <div class="quality-circle good"></div>
+      <div :class="{'quality-circle': true, 
+        good: this.quality == 2, 
+        medium: this.quality == 1, 
+        low: this.quality == 0}"></div>
       <div class="function-type">
         <span class="function-name">{{ name }}</span>
       </div>
