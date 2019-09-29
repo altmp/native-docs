@@ -107,7 +107,10 @@ export default class Navigation extends Vue {
   flex-direction: column;
   box-sizing: border-box;
   padding: 0px 20px 0px 20px;
+  overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #AAA transparent;
 }
 
 .natives-list::-webkit-scrollbar {
