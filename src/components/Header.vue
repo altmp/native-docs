@@ -4,9 +4,9 @@
       <img src="@/assets/v_logo.svg"/>
     </router-link>
     <div class="nativesStats">
-      <div>Total natives: {{ nativesCount }}</div>
-      <div>Named: {{ nativesNamed }}</div>
-      <div>Original names: {{ nativesOrigNames }}</div>
+      <div v-if="nativesCount > 0">Total natives: {{ nativesCount }}</div>
+      <div v-if="nativesNamed > 0">Named: {{ nativesNamed }}</div>
+      <div v-if="nativesOrigNames > 0">Original names: {{ nativesOrigNames }}</div>
     </div>
   </div>
 </template>
