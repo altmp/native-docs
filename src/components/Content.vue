@@ -68,7 +68,7 @@
           <div class="description-section">
             <div class="section-header">Description</div>
 
-            <pre v-if="native.comment !== undefined">{{ native.comment }}</pre>
+            <pre v-if="native.comment !== undefined && native.comment.trim().length > 0">{{ native.comment }}</pre>
             <span v-else class="no-description">No description</span>
           </div>
         </div>
@@ -262,6 +262,11 @@ export default class Content extends Vue {
           font-weight: bold;
           font-size: 32px;
           color: #FFFFFF;
+        }
+
+        .no-description {
+          font-style: italic;
+          color: rgba(255, 255, 255, 0.5);
         }
 
         .arg-data {

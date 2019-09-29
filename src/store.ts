@@ -69,7 +69,6 @@ export default new Vuex.Store({
               quality = 2;
             }
           }
-          
           native.hash = nHash;
           native.quality = quality;
           native.category = category;
