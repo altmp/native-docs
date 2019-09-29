@@ -60,16 +60,12 @@ $animTime: 50ms;
     height: 20px;
     align-items: center;
     user-select: none;
+    cursor: pointer;
 
     i {
       padding: 2px 0;
       height: 16px;
-      cursor: pointer;
       transition: transform .1s ease;
-
-      &:hover {
-        opacity: .7;
-      }
     }
 
     &.opened i {
@@ -82,6 +78,10 @@ $animTime: 50ms;
       font-weight: bold;
       font-size: 16px;
       color: #FFFFFF;
+    }
+
+    &:hover {
+      opacity: .7;
     }
   }
 
