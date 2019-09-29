@@ -7,6 +7,16 @@ interface VersionInfo {
   lastUpdate: number;
 }
 
+interface Native {
+  altName: string;
+  name: string;
+  jhash: string;
+  hashes: { [s: number]: string };
+}
+
+interface Category { [s: string]: Native; }
+interface Natives { [s: string]: Category; }
+
 const NATIVE_VERSION_URL = 'https://natives.altv.mp/version';
 const NATIVE_DATA_URL = 'https://natives.altv.mp/natives';
 
@@ -75,11 +85,13 @@ export default new Vuex.Store({
           nativesByCat[category].push({
             name: native.altName,
             quality,
-            key: nHash
+            hash: nHash
           });
-
+          
+          native.hash = nHash;
           native.quality = quality;
           native.category = category;
+
           nativesByHash[nHash] = native;
         }
       }
@@ -87,10 +99,56 @@ export default new Vuex.Store({
       ctx.commit('setNativesStats', {
         totalNatives, names, originalNames
       });
+
       ctx.commit('setCategories', categories);
       ctx.commit('setNatives', njsData);
       ctx.commit('setNativesToCategories', nativesByCat);
       ctx.commit('setNativesByHash', nativesByHash);
+    },
+    search(ctx, str) {
+      const result: any[] = [];
+      const strs = str.split(' ')
+        .flatMap((s: string) => s.split('_'))
+        .filter((s: string) => s.length > 0)
+        .map((s: string) => s.toLowerCase());
+
+      let count = 0;
+
+      for (const cat of Object.values(ctx.state.natives as Natives)) {
+        for (const n of Object.values(cat)) {
+          let found = 0;
+
+          for (const s of strs) {
+            if (n.altName.toLowerCase().search(s) !== -1) {
+              ++found;
+            } else if (n.jhash.toLowerCase() === s) {
+              ++found;
+            } else if (n.hashes) {
+              for (const hash of Object.values(n.hashes)) {
+                if (hash.toLowerCase() === s) {
+                  ++found;
+                  break;
+                }
+              }
+            }
+          }
+
+          if (found === strs.length) {
+            ++count;
+            result.push(n);
+          }
+
+          if (count >= 200) {
+            break;
+          }
+        }
+
+        if (count >= 200) {
+          break;
+        }
+      }
+
+      return result;
     }
   }
 });

@@ -16,7 +16,6 @@ export default class NativeListItem extends Vue {
   @Prop() private name!: string;
   @Prop() private quality!: number;
   @Prop() private hash!: string;
-  @Prop() private category!: string;
 }
 </script>
 

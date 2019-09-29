@@ -5,7 +5,13 @@
       <div class="name">{{ name }}</div>
     </div>
     <div v-if="isOpened" :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
-      <native-list-item v-for="nativeName in nativeNames" :key="nativeName.key" :name="nativeName.name" :quality="nativeName.quality" :category="name" :hash="nativeName.key"/>
+      <native-list-item
+        v-for="n in natives"
+        :key="n.hash"
+        :name="n.name"
+        :quality="n.quality"
+        :hash="n.hash"
+      />
     </div>
   </div>
 </template>
@@ -27,7 +33,7 @@ export default class NavCollapse extends Vue {
     return this.isOpened;
   }
 
-  private get nativeNames(): string[] {
+  private get natives(): string[] {
     return this.$store.state.nativesByCat[this.name];
   }
 

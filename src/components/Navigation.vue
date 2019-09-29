@@ -1,28 +1,50 @@
 <template>
   <div class="navbar">
     <div class="find-input">
-      <input type="text" placeholder="Search natives"/>
+      <input type="text" placeholder="Search natives" v-model="searchStr"/>
     </div>
     <div class="natives-list-out">
-      <div class="natives-list">
+      <div v-if="searchStr.length === 0" class="natives-list">
         <nav-collapse v-for="cat in categories" :key="cat" :name="cat"/>
+      </div>
+
+      <div v-else class="natives-list">
+        <native-list-item
+          v-for="n in searchResult"
+          :key="n.hash"
+          :name="n.altName"
+          :quality="n.quality"
+          :hash="n.hash"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import NavCollapse from '@/components/NavCollapse.vue';
+import NativeListItem from '@/components/NativeListItem.vue';
 
 @Component({
   components: {
-    NavCollapse
+    NavCollapse,
+    NativeListItem
   }
 })
 export default class Navigation extends Vue {
+  private searchStr: string = '';
+  private searchResult: any[] = [];
+
   private get categories() {
     return this.$store.state.categories;
+  }
+
+  @Watch('searchStr')
+  private async onSearchStrChange(str: string) {
+    this.searchResult = await this.$store.dispatch('search', str);
+
+    console.log(this.searchResult[0]);
   }
 }
 </script>
