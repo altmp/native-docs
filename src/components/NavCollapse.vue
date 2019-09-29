@@ -1,9 +1,10 @@
 <template>
   <div class="nav-collapse">
-    <div class="collapse-name" @click="toggle">
-      <div :class="{triangle: true, 'triangle-opened': opened}"></div>
+    <div class="collapse-name" :class="{ opened: isOpened }" @click="toggle">
+      <i class="icon-right-open" />
       <div class="name">{{ name }}</div>
     </div>
+
     <div v-if="isOpened" :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
       <native-list-item
         v-for="n in natives"
@@ -60,18 +61,19 @@ $animTime: 50ms;
     align-items: center;
     user-select: none;
 
-    .triangle {
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 9px 15px 9px;
-      border-color: transparent transparent #C4C4C4 transparent;
-      transition: $animTime transform ease;
-      transform: rotateZ(90deg);
+    i {
+      padding: 2px 0;
+      height: 16px;
+      cursor: pointer;
+      transition: transform .1s ease;
+
+      &:hover {
+        opacity: .7;
+      }
     }
 
-    .triangle-opened {
-      transform: rotateZ(180deg);
+    &.opened i {
+      transform: rotate(90deg);
     }
 
     .name {

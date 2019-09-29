@@ -2,7 +2,9 @@
   <div class="navbar">
     <div class="find-input">
       <input type="text" placeholder="Search natives" v-model="searchStr"/>
+      <i class="icon-cancel" @click="searchStr = ''" />
     </div>
+
     <div class="natives-list-out">
       <div v-if="searchStr.length === 0" class="natives-list">
         <nav-collapse v-for="cat in categories" :key="cat" :name="cat"/>
@@ -69,6 +71,7 @@ export default class Navigation extends Vue {
 }
 
 .find-input {
+  position: relative;
   margin: 20px 20px 15px 20px;
 
   input {
@@ -90,6 +93,19 @@ export default class Navigation extends Vue {
     background: rgba(0, 0, 0, 0.4);
     border: 0px solid black;
     height: 35px;
+  }
+
+  .icon-cancel {
+    position: absolute;
+    padding: 8.5px;
+    top: 0;
+    right: 0;
+    opacity: .5;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .6;
+    }
   }
 }
 
