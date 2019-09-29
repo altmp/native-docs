@@ -1,8 +1,8 @@
 <template>
   <div class="header">
-    <div class="logo">
+    <router-link to="/" class="logo">
       <img src="@/assets/v_logo.svg"/>
-    </div>
+    </router-link>
     <div class="nativesStats">
       <div>Total natives: {{ nativesCount }}</div>
       <div>Named: {{ nativesNamed }}</div>

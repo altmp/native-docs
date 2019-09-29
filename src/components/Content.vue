@@ -87,6 +87,11 @@
       </div>
     </div>
   </div>
+  <div v-else class="content credits">
+    <span class="thanks">Thanks <strong>Alexander Blade</strong> for <a target="_blank" class="credits-link" href="http://dev-c.com/nativedb/">initial natives database</a> and everybody who contributed.</span>
+    <span class="thanks">Also thanks to <strong>UnknownModder</strong> for researches. Actual native-db based on his <a target="_blank" class="credits-link" href="https://github.com/UnknownModder/gta5-nativedb-data">repository</a>.</span>
+    <span class="thanks">Designed and developed by <strong>altMP Team</strong>.</span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -129,6 +134,30 @@ export default class Content extends Vue {
   box-sizing: border-box;
   padding: 20px 0 0 20px;
   flex-direction: column;
+
+  &.credits {
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 20px;
+  }
+
+  .thanks {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  .credits-link {
+    &:visited {
+      color:rgba(125, 125, 255, 0.5);
+    }
+    &:hover {
+      color:rgba(125, 125, 255, 0.8);
+    }
+    color:rgba(125, 125, 255, 0.5);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 200ms color ease;
+  }
 
   .function-type {
     margin-left: 10px;

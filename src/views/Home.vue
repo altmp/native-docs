@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <nav-bar/>
-    <native-content v-if="nativeHash" :hash="nativeHash"/>
+    <native-content :hash="nativeHash"/>
   </div>
 </template>
 
