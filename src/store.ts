@@ -7,8 +7,8 @@ interface VersionInfo {
   lastUpdate: number;
 }
 
-const NATIVE_VERSION_URL = 'https://native-api.altv.mp/version';
-const NATIVE_DATA_URL = 'https://native-api.altv.mp/natives';
+const NATIVE_VERSION_URL = 'https://natives.altv.mp/version';
+const NATIVE_DATA_URL = 'https://natives.altv.mp/natives';
 
 export default new Vuex.Store({
   state: {
