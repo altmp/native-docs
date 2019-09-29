@@ -8,7 +8,7 @@
       <native-list-item
         v-for="n in natives"
         :key="n.hash"
-        :name="n.name"
+        :name="n.altName"
         :quality="n.quality"
         :hash="n.hash"
       />
@@ -34,7 +34,7 @@ export default class NavCollapse extends Vue {
   }
 
   private get natives(): string[] {
-    return this.$store.state.nativesByCat[this.name];
+    return Object.values(this.$store.state.natives[this.name]);
   }
 
   private toggle() {

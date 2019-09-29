@@ -35,16 +35,22 @@ import NativeListItem from '@/components/NativeListItem.vue';
 export default class Navigation extends Vue {
   private searchStr: string = '';
   private searchResult: any[] = [];
+  private searchTimeout: number|null = null;
 
   private get categories() {
-    return this.$store.state.categories;
+    return Object.keys(this.$store.state.natives);
   }
 
   @Watch('searchStr')
   private async onSearchStrChange(str: string) {
-    this.searchResult = await this.$store.dispatch('search', str);
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
 
-    console.log(this.searchResult[0]);
+    this.searchTimeout = setTimeout(async () => {
+      this.searchTimeout = null;
+      this.searchResult = await this.$store.dispatch('search', str);
+    }, 10);
   }
 }
 </script>

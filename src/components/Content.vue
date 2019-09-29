@@ -1,43 +1,45 @@
 <template>
-  <div v-if="nativeData" class="content">
+  <div v-if="native" class="content">
     <div class="doc-header">
-      <div :class="{'quality-circle': true, 
-        good: this.quality == 2, 
-        medium: this.quality == 1, 
-        low: this.quality == 0}"></div>
+      <div :class="{
+        'quality-circle': true, 
+        good: native.quality == 2, 
+        medium: native.quality == 1, 
+        low: native.quality == 0
+      }"></div>
       <div class="function-type">
-        <span class="function-name">{{ name }}</span>
+        <span class="function-name">{{ native.altName }}</span>
       </div>
     </div>
     <div class="doc-data-out">
       <div class="doc-data-in">
         <div class="content-native-info">
           <div class="summary-info">
-            <div class="category-name">{{ categoryLowerCase }}</div>
-            <div class="native-name">{{ name }}</div>
-            <div v-if="summary && summary.length > 0" class="native-summary">{{ summary }}</div>
-            <div v-if="!summary || summary.length === 0" class="native-summary empty">No summary</div>
+            <div class="category-name">{{ native.category.toLowerCase() }}</div>
+            <div class="native-name">{{ native.altName }}</div>
+            <div v-if="native.summary && native.summary.length > 0" class="native-summary">{{ native.summary }}</div>
+            <div v-else class="native-summary empty">No summary</div>
           </div>
           <div class="divider"></div>
           <div class="description-section">
             <div class="section-header">Declaration</div>
             <div class="code">
               <span class="function-color">function&nbsp;</span>
-              <span class="function-name">{{ name }}</span>
+              <span class="function-name">{{ native.altName }}</span>
               <span>(</span>
-              <span v-for="(arg, i) in args" :key="i" class="function-arg">
+              <span v-for="(arg, i) in native.params" :key="i" class="function-arg">
                 <span class="function-arg-name">{{ arg.name }}</span>
                 <span>: </span>
                 <span class="function-arg-type">{{ arg.type }}</span>
-                <span>{{ (i != (args.length - 1)) ? ',&nbsp;' : '' }}</span>
+                <span>{{ (i != (native.params.length - 1)) ? ',&nbsp;' : '' }}</span>
               </span>
               <span>):&nbsp;</span>
-              <span class="function-result-type">{{ resultType }}</span>
+              <span class="function-result-type">{{ native.results }}</span>
             </div>
           </div>
-          <div v-if="args.length > 0" class="description-section">
+          <div v-if="native.params.length > 0" class="description-section">
             <div class="section-header">Arguments</div>
-            <div v-for="(arg, i) in args" :key="i" class="arg-data">
+            <div v-for="(arg, i) in native.params" :key="i" class="arg-data">
               <div class="arg-declaration">
                 <span class="arg-name">{{ arg.name }}</span>
                 <span>: </span>
@@ -49,16 +51,16 @@
               </div>
             </div>
           </div>
-          <div v-if="resultType !== 'void'" class="description-section">
+          <div v-if="native.results !== 'void'" class="description-section">
             <div class="section-header">Result</div>
             <div class="arg-data">
               <div class="arg-declaration">
                 <span class="arg-name">result</span>
                 <span>: </span>
-                <span class="function-arg-type">{{ resultType }}</span>
+                <span class="function-arg-type">{{ native.results }}</span>
               </div>
               <div class="arg-description">
-                <span v-if="resultDescription !== undefined" class="arg-description-text"></span>
+                <span v-if="native.resultDescription !== undefined" class="arg-description-text"></span>
                 <span v-else class="arg-description-text empty">No description</span>
               </div>
             </div>
@@ -66,8 +68,8 @@
           <div class="description-section">
             <div class="section-header">Description</div>
 
-            <pre v-if="description !== undefined">{{ description }}</pre>
-            <span v-if="description === undefined" class="no-description">No description</span>
+            <pre v-if="native.comment !== undefined">{{ native.comment }}</pre>
+            <span v-else class="no-description">No description</span>
           </div>
         </div>
         <div class="content-hash-history">
@@ -94,59 +96,23 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 export default class Content extends Vue {
   @Prop() private hash!: string;
 
-  private get nativeData() {
+  private get native() {
     return this.$store.state.nativesByHash[this.hash];
-  }
-
-  private get category() {
-    return this.nativeData ? this.nativeData.category : '';
-  }
-
-  private get categoryLowerCase() {
-    return this.category.toLowerCase();
-  }
-
-  private get name() {
-    return this.nativeData ? this.nativeData.altName : '';
-  }
-
-  private get summary() {
-    return this.nativeData ? this.nativeData.summary : '';
-  }
-
-  private get quality() {
-    return this.nativeData ? this.nativeData.quality : 0;
-  }
-
-  private get args() {
-    return this.nativeData ? this.nativeData.params : [];
-  }
-
-  private get resultType() {
-    return this.nativeData ? this.nativeData.results : '';
-  }
-
-  private get resultDescription() {
-    return this.nativeData.resultDescription ? this.nativeData.resultDescription : undefined;
-  }
-
-  private get description() {
-    return this.nativeData ? this.nativeData.comment : undefined;
   }
 
   private get hashesHistory() {
     const history = [];
-    if (this.nativeData && this.nativeData.hashes !== undefined) {
-      if (this.nativeData.jhash && this.nativeData.jhash.length > 0) {
+    if (this.native && this.native.hashes !== undefined) {
+      if (this.native.jhash && this.native.jhash.length > 0) {
         history.unshift({
           version: 'joaat',
-          hash: this.nativeData.jhash
+          hash: this.native.jhash
         });
       }
-      for (const version in this.nativeData.hashes) {
+      for (const version in this.native.hashes) {
         history.unshift({
           version,
-          hash: this.nativeData.hashes[version]
+          hash: this.native.hashes[version]
         });
       }
     }
