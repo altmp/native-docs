@@ -43,14 +43,18 @@ export default class Navigation extends Vue {
 
   @Watch('searchStr')
   private async onSearchStrChange(str: string) {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
+    if (str.length > 0) {
+      if (this.searchTimeout) {
+        clearTimeout(this.searchTimeout);
+      }
 
-    this.searchTimeout = setTimeout(async () => {
-      this.searchTimeout = null;
-      this.searchResult = await this.$store.dispatch('search', str);
-    }, 10);
+      this.searchTimeout = setTimeout(async () => {
+        this.searchTimeout = null;
+        this.searchResult = await this.$store.dispatch('search', str);
+      }, 100);
+    } else {
+      this.searchResult = [];
+    }
   }
 }
 </script>
