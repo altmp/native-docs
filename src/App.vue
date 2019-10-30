@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <my-header msg="VadZz Loh"/>
+    <my-header/>
     <router-view/>
   </div>
 </template>
