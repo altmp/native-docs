@@ -30,7 +30,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setNatives(state, natives) {
-      state.natives = natives;
+      setTimeout(() => state.natives = natives, 100);
     },
     setNativesStats(state, stats) {
       state.nativesCount = stats.totalNatives;
