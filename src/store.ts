@@ -12,6 +12,7 @@ interface Native {
   name: string;
   jhash: string;
   hashes: { [s: number]: string };
+  comment: string;
 }
 
 interface Category { [s: string]: Native; }
@@ -113,8 +114,17 @@ export default new Vuex.Store({
           }
 
           if (found === strs.length) {
-            ++count;
-            result.push(n);
+            if (!result.includes(n)) {
+              ++count;
+              result.push(n);
+            }
+          }
+
+          if (n.comment.toLowerCase().includes(str.toLowerCase())) {
+            if (!result.includes(n)) {
+              ++count;
+              result.push(n);
+            }
           }
 
           if (count >= 200) {
