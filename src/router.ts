@@ -10,6 +10,10 @@ export default new Router({
       path: '/:hash?',
       name: 'home',
       component: Home,
+      props: true,
+      meta: {
+        title: 'alt:V / NativeDB'
+      }
     }
   ],
 });

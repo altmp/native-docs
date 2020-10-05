@@ -1,5 +1,5 @@
 <template>
-  <router-link class="native-list-item" :to="`/${hash}`">
+  <router-link class="native-list-item" :to="{name: 'home', params: {hash}}">
     <div :class="{'quality-circle': true, 
       good: this.quality == 2, 
       medium: this.quality == 1, 
