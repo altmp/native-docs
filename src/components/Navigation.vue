@@ -7,7 +7,7 @@
 
     <div class="natives-list-out">
       <div v-if="searchStr.length === 0" class="natives-list">
-        <nav-collapse v-for="cat in categories" :key="cat" :name="cat"/>
+        <nav-collapse v-for="cat in categories" :key="cat" :category="cat"/>
       </div>
 
       <div v-else class="natives-list">
@@ -37,10 +37,10 @@ import NativeListItem from '@/components/NativeListItem.vue';
 export default class Navigation extends Vue {
   private searchStr: string = '';
   private searchResult: any[] = [];
-  private searchTimeout: number|null = null;
+  private searchTimeout: number | null = null;
 
   private get categories() {
-    return Object.keys(this.$store.state.natives);
+    return Object.keys(this.$store.state.nativesByCat);
   }
 
   @Watch('searchStr')

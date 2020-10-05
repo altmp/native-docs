@@ -6,7 +6,7 @@
     <div class="nativesStats">
       <div v-if="nativesCount > 0">Total natives: {{ nativesCount }}</div>
       <div v-if="nativesNamed > 0">Named: {{ nativesNamed }}</div>
-      <div v-if="nativesOrigNames > 0">Original names: {{ nativesOrigNames }}</div>
+      <div v-if="nativesOrigNamed > 0">Original names: {{ nativesOrigNamed }}</div>
     </div>
   </div>
 </template>
@@ -24,8 +24,8 @@ export default class Header extends Vue {
     return this.$store.state.nativesNamed;
   }
 
-  get nativesOrigNames() {
-    return this.$store.state.nativesOrigNames;
+  get nativesOrigNamed() {
+    return this.$store.state.nativesOrigNamed;
   }
 }
 </script>

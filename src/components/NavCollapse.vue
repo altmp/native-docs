@@ -2,7 +2,7 @@
   <div class="nav-collapse">
     <div class="collapse-name" :class="{ opened: isOpened }" @click="toggle">
       <i class="icon-right-open" />
-      <div class="name">{{ name }}</div>
+      <div class="name">{{ category }}</div>
     </div>
 
     <div v-if="isOpened" :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
@@ -27,7 +27,7 @@ import NativeListItem from '@/components/NativeListItem.vue';
   }
 })
 export default class NavCollapse extends Vue {
-  @Prop() private name!: string;
+  @Prop() private category!: string;
   private isOpened: boolean = false;
 
   get opened(): boolean {
@@ -35,7 +35,7 @@ export default class NavCollapse extends Vue {
   }
 
   private get natives(): string[] {
-    return Object.values(this.$store.state.natives[this.name]);
+    return Object.values(this.$store.state.nativesByCat[this.category]);
   }
 
   private toggle() {

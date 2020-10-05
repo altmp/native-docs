@@ -1,22 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { NativeAlt } from '@/models/Native';
+import { NativeDb, NativesByCat, NativesByHash, VersionInfo } from '@/models/NativeDb';
 
 Vue.use(Vuex);
-
-interface VersionInfo {
-  lastUpdate: number;
-}
-
-interface Native {
-  altName: string;
-  name: string;
-  jhash: string;
-  hashes: { [s: number]: string };
-  comment: string;
-}
-
-interface Category { [s: string]: Native; }
-interface Natives { [s: string]: Category; }
 
 const NATIVE_VERSION_URL = 'https://natives.altv.mp/version';
 const NATIVE_DATA_URL = 'https://natives.altv.mp/natives';
@@ -25,21 +12,17 @@ export default new Vuex.Store({
   state: {
     nativesCount: 0,
     nativesNamed: 0,
-    nativesOrigNames: 0,
-    natives: {},
-    nativesByHash: {}
+    nativesOrigNamed: 0,
+    nativesByCat: {} as NativesByCat,
+    nativesByHash: {} as NativesByHash
   },
   mutations: {
-    setNatives(state, natives) {
-      state.natives = natives;
-    },
-    setNativesStats(state, stats) {
-      state.nativesCount = stats.totalNatives;
-      state.nativesNamed = stats.names;
-      state.nativesOrigNames = stats.originalNames;
-    },
-    setNativesByHash(state, nativesByHash) {
-      state.nativesByHash = nativesByHash;
+    init(state, data) {
+      state.nativesByCat = data.nativesByCat;
+      state.nativesByHash = data.nativesByHash;
+      state.nativesCount = data.nativesCount;
+      state.nativesNamed = data.nativesNamed;
+      state.nativesOrigNamed = data.nativesOrigNamed;
     }
   },
   actions: {
@@ -49,41 +32,39 @@ export default new Vuex.Store({
       const realVersion: number = realVersionJson.lastUpdate;
 
       const nResponse = await fetch(`${NATIVE_DATA_URL}?v=${realVersion}`);
-      const njsData = await nResponse.json();
+      const nativesByCat: NativeDb = await nResponse.json();
 
-      let totalNatives = 0;
-      let names = 0;
-      let originalNames = 0;
-      const nativesByHash: any = {};
+      let nativesCount = 0;
+      let nativesNamed = 0;
+      let nativesOrigNamed = 0;
+      const nativesByHash: NativesByHash = {};
 
-      for (const category in njsData) {
-        for (const nHash in njsData[category]) {
-          const native = njsData[category][nHash];
+      for (const category in nativesByCat) {
+        for (const nHash in nativesByCat[category]) {
+          const native = nativesByCat[category][nHash];
 
-          totalNatives++;
+          nativesCount++;
           let quality = 0;
           if (native.name !== undefined && native.name.length > 0) {
-            names++;
+            nativesNamed++;
             quality = 1;
             if (native.name[0] !== '_') {
-              originalNames++;
+              nativesOrigNamed++;
               quality = 2;
             }
           }
-          native.hash = nHash;
-          native.quality = quality;
-          native.category = category;
 
-          nativesByHash[nHash] = native;
+          const nativeAlt: NativeAlt = native;
+          nativeAlt.hash = nHash;
+          nativeAlt.quality = quality;
+          nativeAlt.category = category;
+
+          nativesByHash[nHash] = nativeAlt;
+          nativesByCat[category][nHash] = nativeAlt;
         }
       }
 
-      ctx.commit('setNativesStats', {
-        totalNatives, names, originalNames
-      });
-
-      ctx.commit('setNatives', njsData);
-      ctx.commit('setNativesByHash', nativesByHash);
+      ctx.commit('init', { nativesByCat, nativesByHash, nativesCount, nativesNamed, nativesOrigNamed });
     },
     search(ctx, str) {
       const result: any[] = [];
@@ -94,41 +75,33 @@ export default new Vuex.Store({
 
       let count = 0;
 
-      for (const cat of Object.values(ctx.state.natives as Natives)) {
-        for (const n of Object.values(cat)) {
-          let found = 0;
+      for (const n of Object.values(ctx.state.nativesByHash)) {
+        let found = 0;
 
-          for (const s of strs) {
-            if (n.altName.toLowerCase().search(s) !== -1) {
-              ++found;
-            } else if (n.jhash.toLowerCase() === s) {
-              ++found;
-            } else if (n.hashes) {
-              for (const hash of Object.values(n.hashes)) {
-                if (hash.toLowerCase() === s) {
-                  ++found;
-                  break;
-                }
+        for (const s of strs) {
+          if (n.altName!.toLowerCase().search(s) !== -1) {
+            ++found;
+          } else if (n.jhash!.toLowerCase() === s) {
+            ++found;
+          } else if (n.hashes) {
+            for (const hash of Object.values(n.hashes)) {
+              if (hash.toLowerCase() === s) {
+                ++found;
+                break;
               }
             }
           }
+        }
 
-          if (found === strs.length) {
-            if (!result.includes(n)) {
-              ++count;
-              result.push(n);
-            }
-          }
+        if (found === strs.length) {
+          ++count;
+          result.push(n);
+        }
 
-          if (n.comment.toLowerCase().includes(str.toLowerCase())) {
-            if (!result.includes(n)) {
-              ++count;
-              result.push(n);
-            }
-          }
-
-          if (count >= 200) {
-            break;
+        if (n.comment.toLowerCase().includes(str.toLowerCase())) {
+          if (!result.includes(n)) {
+            ++count;
+            result.push(n);
           }
         }
 

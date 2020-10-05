@@ -96,6 +96,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { NativeAlt } from '@/models/Native';
 
 @Component
 export default class Content extends Vue {
