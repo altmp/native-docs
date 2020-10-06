@@ -29,7 +29,7 @@
               <span>(</span>
               <span v-for="(arg, i) in native.params" :key="i" class="function-arg">
                 <span class="function-arg-name">{{ arg.name }}</span>
-                <span>: </span>
+                <span>:&nbsp;</span>
                 <span class="function-arg-type">{{ arg.type }}</span>
                 <span>{{ (i != (native.params.length - 1)) ? ',&nbsp;' : '' }}</span>
               </span>
@@ -42,7 +42,7 @@
             <div v-for="(arg, i) in native.params" :key="i" class="arg-data">
               <div class="arg-declaration">
                 <span class="arg-name">{{ arg.name }}</span>
-                <span>: </span>
+                <span>:&nbsp;</span>
                 <span class="function-arg-type">{{ arg.type }}</span>
               </div>
               <div class="arg-description">
@@ -56,7 +56,7 @@
             <div class="arg-data">
               <div class="arg-declaration">
                 <span class="arg-name">result</span>
-                <span>: </span>
+                <span>:&nbsp;</span>
                 <span class="function-arg-type">{{ native.results }}</span>
               </div>
               <div class="arg-description">
@@ -192,10 +192,6 @@ export default class Content extends Vue {
     color: #4EC9B0;
   }
 
-  .function-arg span{
-    white-space: nowrap;
-  }
-
   .code {
     font-family: monospace;
     font-size: 1.2rem;
@@ -212,6 +208,7 @@ export default class Content extends Vue {
     text-align: start;
     word-wrap: break-word;
     margin-top: 10px;
+    white-space: break-spaces;
   }
 
   .doc-header {
