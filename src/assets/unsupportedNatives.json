@@ -1,0 +1,14 @@
+[
+  "removeScenarioBlockingArea",
+  "setPedPopulationBudget",
+  "setCreateRandomCops",
+  "setRandomBoats",
+  "setRandomTrains",
+  "setGarbageTrucks",
+  "setVehiclePopulationBudget",
+  "setAllVehicleGeneratorsActive",
+  "setAllLowPriorityVehicleGeneratorsActive",
+  "setNumberOfParkedVehicles",
+  "setDistantCarsEnabled",
+  "disableVehicleDistantlights"
+]

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { NativeAlt } from '@/models/Native';
 import { NativeDb, NativesByCat, NativesByHash, VersionInfo } from '@/models/NativeDb';
+import unsupportedNatives from './assets/unsupportedNatives.json';
 
 Vue.use(Vuex);
 
@@ -51,6 +52,10 @@ export default new Vuex.Store({
             if (native.name[0] !== '_') {
               nativesOrigNamed++;
               quality = 2;
+            }
+
+            if (unsupportedNatives.includes(native.altName)) {
+              quality = 0;
             }
           }
 
