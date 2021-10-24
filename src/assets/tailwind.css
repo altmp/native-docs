@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +7,7 @@
 @layer base {
   html, body, #app {
     @apply font-sans relative w-full min-h-screen antialiased;
-    font-size: 16px;
+    font-size: 14px;
   }
   ::-webkit-scrollbar {
     width: 4px;
@@ -19,10 +19,20 @@
   ::-webkit-scrollbar-thumb {
     @apply bg-gray-100/40;
   }
+  @screen sm {
+    html, body, #app {
+      font-size: 12px;
+    }
+  }
+  @screen lg {
+    html, body, #app {
+      font-size: 14px;
+    }
+  }
 }
 body {
-  background-image: linear-gradient(rgba(31,41,55, 0.3),rgba(31,41,55, 0.3)) , url('/imgs/back.png');
-
+  background-image: url('/imgs/back.png');
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }

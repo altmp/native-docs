@@ -9,11 +9,11 @@ export default defineComponent({
   },
   computed: {
     color() {
-      let colorClass = `bg-green-500`
+      let colorClass = `bg-[#008736]`
       switch(this.quality) {
         case 0: colorClass = 'bg-orange-500'; break;
         case 1: colorClass = 'bg-yellow-500'; break;
-        case 2: colorClass = 'bg-green-500'; break;
+        case 2: colorClass = 'bg-[#008736]'; break;
       }
       return colorClass
     }

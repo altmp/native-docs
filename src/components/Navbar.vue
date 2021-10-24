@@ -25,7 +25,7 @@ export default defineComponent({
       z-20
       h-16
       p-3
-      bg-gray-900/80
+      bg-gray-base-500/80
       flex
       items-center
       justify-between
@@ -41,7 +41,7 @@ export default defineComponent({
       <p>Original names: {{ nativesOrigNamed }}</p>
     </div>
     <svg
-      class="inline-flex lg:hidden w-12 h-12 cursor-pointer"
+      class="inline-flex xl:hidden w-12 h-12 cursor-pointer"
       @click="sidebarStore.toggleSidebar(!sidebarStore.show)"
       fill="currentColor"
       viewBox="0 0 20 20"

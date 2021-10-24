@@ -6,11 +6,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/:hash?',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: {
+      title: 'alt:V / NativeDB'
+    }
   },
 ]
 
-export default createRouter({
+
+const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+export default router
