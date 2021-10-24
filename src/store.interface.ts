@@ -8,12 +8,14 @@ export interface Native {
   hashes: NativeHash;
   altName: string;
   oldNames: string[];
+  summary?: string
 }
 
 export interface NativeParam {
   type: string;
   name: string;
   ref: boolean;
+  description?: string
 }
 
 export interface NativeHash {
@@ -24,4 +26,20 @@ export interface NativeAlt extends Native {
   hash?: string;
   quality?: number;
   category?: string;
+}
+
+export interface VersionInfo {
+  lastUpdate: number;
+}
+
+export interface NativeDb {
+  [key: string]: { [key: string]: Native };
+}
+
+export interface NativesByCat {
+  [key: string]: { [key: string]: NativeAlt };
+}
+
+export interface NativesByHash {
+  [key: string]: NativeAlt;
 }

@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #app {
+    @apply font-sans relative w-full min-h-screen antialiased;
+    font-size: 16px;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100/20;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-100/40;
+  }
+}
+body {
+  background-image: linear-gradient(rgba(31,41,55, 0.3),rgba(31,41,55, 0.3)) , url('/imgs/back.png');
+
+  background-size: cover;
+  background-repeat: no-repeat;
+}

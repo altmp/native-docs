@@ -1,55 +1,43 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { NativeAlt } from '@/models/Native';
-import { NativeDb, NativesByCat, NativesByHash, VersionInfo } from '@/models/NativeDb';
+import { defineStore } from 'pinia'
+import {
+  NativeAlt,
+  NativeDb,
+  NativesByCat,
+  NativesByHash,
+  VersionInfo,
+} from './store.interface'
+import axios from 'axios'
 
-Vue.use(Vuex);
+const NATIVE_VERSION_URL = 'https://natives.altv.mp/version'
+const NATIVE_DATA_URL = 'https://natives.altv.mp/natives'
 
-const NATIVE_VERSION_URL = 'https://natives.altv.mp/version';
-const NATIVE_DATA_URL = 'https://natives.altv.mp/natives';
-
-export default new Vuex.Store({
-  state: {
+export const useStore = defineStore('nativeStore', {
+  state: () => ({
     nativesCount: 0,
     nativesNamed: 0,
     nativesOrigNamed: 0,
     nativesByCat: {} as NativesByCat,
-    nativesByHash: {} as NativesByHash
-  },
-  mutations: {
-    init(state, data) {
-      state.nativesByCat = data.nativesByCat;
-      state.nativesByHash = data.nativesByHash;
-      state.nativesCount = data.nativesCount;
-      state.nativesNamed = data.nativesNamed;
-      state.nativesOrigNamed = data.nativesOrigNamed;
-    }
-  },
+    nativesByHash: {} as NativesByHash,
+  }),
   actions: {
-    async load(ctx) {
-      const response = await fetch(NATIVE_VERSION_URL);
-      const realVersionJson: VersionInfo = await response.json();
-      const realVersion: number = realVersionJson.lastUpdate;
+    async load() {
+      const nativeVersionResponse = await axios.get<VersionInfo>(NATIVE_VERSION_URL)
+      const realVersion = nativeVersionResponse.data.lastUpdate
+      const nativeDataResponse = await axios.get<NativeDb>(`${NATIVE_DATA_URL}?v=${realVersion}`)
+      const nativesByCat = nativeDataResponse.data
 
-      const nResponse = await fetch(`${NATIVE_DATA_URL}?v=${realVersion}`);
-      const nativesByCat: NativeDb = await nResponse.json();
-
-      let nativesCount = 0;
-      let nativesNamed = 0;
-      let nativesOrigNamed = 0;
-      const nativesByHash: NativesByHash = {};
-
+      const nativesByHash: NativesByHash = {}
       for (const category in nativesByCat) {
         for (const nHash in nativesByCat[category]) {
           const native = nativesByCat[category][nHash];
 
-          nativesCount++;
+          this.nativesCount++;
           let quality = 0;
           if (native.name !== undefined && native.name.length > 0) {
-            nativesNamed++;
+            this.nativesNamed++;
             quality = 1;
             if (native.name[0] !== '_') {
-              nativesOrigNamed++;
+              this.nativesOrigNamed++;
               quality = 2;
             }
           }
@@ -63,10 +51,10 @@ export default new Vuex.Store({
           nativesByCat[category][nHash] = nativeAlt;
         }
       }
-
-      ctx.commit('init', { nativesByCat, nativesByHash, nativesCount, nativesNamed, nativesOrigNamed });
+      this.nativesByCat = nativesByCat
+      this.nativesByHash = nativesByHash
     },
-    search(ctx, str) {
+    search(str: string) {
       const result: any[] = [];
       const strs = str.split(' ')
         .flatMap((s: string) => s.split('_'))
@@ -75,7 +63,7 @@ export default new Vuex.Store({
 
       let count = 0;
 
-      for (const n of Object.values(ctx.state.nativesByHash)) {
+      for (const n of Object.values(this.nativesByHash)) {
         let found = 0;
 
         for (const s of strs) {
@@ -109,8 +97,21 @@ export default new Vuex.Store({
           break;
         }
       }
-
-      return result;
+      return result
     }
   }
-});
+})
+
+
+export const useSidebarStore = defineStore('sidebarStore', {
+  state: () => {
+    return {
+      show: true
+    }
+  },
+  actions: {
+    toggleSidebar(toggle: boolean) {
+      this.show = toggle
+    }
+  }
+})
