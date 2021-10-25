@@ -65,12 +65,11 @@ export default defineComponent({
     </form>
     <template v-for="category in categories" v-if="search.length <= 0">
       <li
-        class="py-2 px-4 font-black text-lg flex justify-between cursor-pointer"
+        class="py-1.5 px-4 font-bold text-lg flex items-center cursor-pointer"
         @click="toggleSelect(category)"
       >
-        {{ category }}
         <svg
-          class="w-6 h-6 transition"
+          class="w-8 h-8 transition mr-2"
           :class="[select === category ? 'rotate-90' : '']"
           fill="currentColor"
           viewBox="0 0 20 20"
@@ -82,6 +81,7 @@ export default defineComponent({
             clip-rule="evenodd"
           ></path>
         </svg>
+        {{ category }}
       </li>
       <ul v-if="select === category" class="ml-6">
         <li v-for="native in natives">
