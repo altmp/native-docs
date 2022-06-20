@@ -29,7 +29,7 @@ export default class NativeListItem extends Vue {
   cursor: pointer;
   margin-bottom: 7px;
 
-  &.router-link-exact-active {
+  &.router-link-active {
     font-weight: 700;
   }
 

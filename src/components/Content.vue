@@ -128,7 +128,7 @@ export default class Content extends Vue {
   @Watch('native', { immediate: false, deep: true })
   private onNativeChange(to: NativeAlt, from: NativeAlt) {
     if (to && to.altName) {
-      document.title = `${this.$route.meta.title} / ${to.altName}`;
+      document.title = `${this.$route.meta?.title ?? ''} / ${to.altName}`;
     }
   }
 }
