@@ -129,8 +129,11 @@ export default class Content extends Vue {
   private onNativeChange(to: NativeAlt, from: NativeAlt) {
     if (to && to.altName) {
       document.title = `${this.$route.meta?.title ?? ''} / ${to.altName}`;
-      document.querySelector('meta[property="og:title"]').setAttribute("content", "alt:V / NativeDB / " + to.altName);
-      if (to.comment) document.querySelector('meta[property="og:description"]').setAttribute("content", to.comment.substring(0, 2047));
+      document.querySelector('meta[property="og:title"]')?.setAttribute('content', 'alt:V / NativeDB / ' + to.altName);
+      if (to.comment) {
+        document.querySelector('meta[property="og:description"]')
+          ?.setAttribute('content', to.comment.substring(0, 2047));
+      }
     }
   }
 }

@@ -43,8 +43,8 @@ export default class Navigation extends Vue {
     return Object.keys(this.$store.state.nativesByCat);
   }
 
-  mounted() {
-    this.searchStr = (this.$router as any).history.current.query?.query ?? "";
+  public mounted() {
+    this.searchStr = (this.$router as any).history.current.query?.query ?? '';
   }
 
   @Watch('searchStr')

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import VueMeta from 'vue-meta'
+import VueMeta from 'vue-meta';
 import router from './router';
 import store from './store';
 
