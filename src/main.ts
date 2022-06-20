@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import App from './App.vue';
+import VueMeta from 'vue-meta'
 import router from './router';
 import store from './store';
 
+Vue.use(VueMeta);
 Vue.config.devtools = Vue.config.productionTip = false;
 
 const app = new Vue({
