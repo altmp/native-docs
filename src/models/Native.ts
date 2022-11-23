@@ -8,6 +8,7 @@ export interface Native {
   hashes: NativeHash;
   altName: string;
   oldNames: string[];
+  old_names?: string[];
 }
 
 export interface NativeParam {

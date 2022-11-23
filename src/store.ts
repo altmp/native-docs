@@ -66,8 +66,8 @@ export default new Vuex.Store({
 
       ctx.commit('init', { nativesByCat, nativesByHash, nativesCount, nativesNamed, nativesOrigNamed });
     },
-    search(ctx, str) {
-      const result: any[] = [];
+    search(ctx, str: string) {
+      const result: NativeAlt[] = [];
       const strs = str.split(' ')
         .flatMap((s: string) => s.split('_'))
         .filter((s: string) => s.length > 0)
@@ -83,16 +83,27 @@ export default new Vuex.Store({
             ++found;
           } else if (n.jhash!.toLowerCase() === s) {
             ++found;
-          } else if (n.hashes) {
-            for (const hash of Object.values(n.hashes)) {
-              if (hash.toLowerCase() === s) {
+          } else if (n.hashes || n.oldNames || n.old_names) {
+            let hashFound = false;
+            if (n.hashes) {
+              for (const hash of Object.values(n.hashes)) {
+                if (hash.toLowerCase() === s) {
+                  ++found;
+                  hashFound = true;
+                  break;
+                }
+              }
+            }
+
+            if (!hashFound) {
+              if (n.oldNames?.find(name => name.toLowerCase().includes(s))) {
                 ++found;
-                break;
+              } else if (n.old_names?.find(name => name.toLowerCase().replace(/_/gm, '').includes(s))) {
+                ++found;
               }
             }
           }
         }
-
         if (found === strs.length) {
           ++count;
           result.push(n);
@@ -104,6 +115,7 @@ export default new Vuex.Store({
             result.push(n);
           }
         }
+
 
         if (count >= 200) {
           break;
