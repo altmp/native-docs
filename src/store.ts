@@ -96,9 +96,9 @@ export default new Vuex.Store({
             }
 
             if (!hashFound) {
-              if (n.oldNames?.find(name => name.toLowerCase().includes(s))) {
+              if (n.oldNames?.find((name) => name.toLowerCase().includes(s))) {
                 ++found;
-              } else if (n.old_names?.find(name => name.toLowerCase().replace(/_/gm, '').includes(s))) {
+              } else if (n.old_names?.find((name) => name.toLowerCase().replace(/_/gm, '').includes(s))) {
                 ++found;
               }
             }

@@ -133,13 +133,13 @@ export default class Content extends Vue {
 
   private get nativeOldNames() {
     const { oldNames = [], old_names = [] } = this.native;
-    if (!(oldNames.length || old_names.length)) return [];
+    if (!(oldNames.length || old_names.length)) { return []; }
 
     return [
-      ...oldNames, // altv names 
-      ...(oldNames.length ? " " : []), 
+      ...oldNames, // altv names
+      ...(oldNames.length ? ' ' : []),
       ...old_names // GTA_NAMES
-    ].join("\n");
+    ].join('\n');
   }
 
   @Watch('native', { immediate: false, deep: true })
