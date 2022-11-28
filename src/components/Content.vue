@@ -71,6 +71,12 @@
             <pre v-if="native.comment !== undefined && native.comment.trim().length > 0">{{ native.comment }}</pre>
             <span v-else class="no-description">No description</span>
           </div>
+          <div class="description-section">
+            <div class="section-header">Old names</div>
+
+            <pre v-if="nativeOldNames.length">{{ nativeOldNames }}</pre>
+            <span v-else class="no-description">No old names</span>
+          </div>
         </div>
         <div class="content-hash-history">
           <div class="content-placeholder"></div>
@@ -102,7 +108,7 @@ import { NativeAlt } from '@/models/Native';
 export default class Content extends Vue {
   @Prop() private hash!: string;
 
-  private get native() {
+  private get native(): NativeAlt {
     return this.$store.state.nativesByHash[this.hash];
   }
 
@@ -123,6 +129,17 @@ export default class Content extends Vue {
       }
     }
     return history;
+  }
+
+  private get nativeOldNames() {
+    const { oldNames = [], old_names = [] } = this.native;
+    if (!(oldNames.length || old_names.length)) return [];
+
+    return [
+      ...oldNames, // altv names 
+      ...(oldNames.length ? " " : []), 
+      ...old_names // GTA_NAMES
+    ].join("\n");
   }
 
   @Watch('native', { immediate: false, deep: true })
