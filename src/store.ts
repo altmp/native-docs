@@ -1,20 +1,22 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { NativeAlt } from '@/models/Native';
-import { NativeDb, NativesByCat, NativesByHash, VersionInfo } from '@/models/NativeDb';
+import { createStore } from "vuex";
+import { NativeAlt } from "@/models/Native";
+import {
+  NativeDb,
+  NativesByCat,
+  NativesByHash,
+  VersionInfo,
+} from "@/models/NativeDb";
 
-Vue.use(Vuex);
+const NATIVE_VERSION_URL = "/version.json";
+const NATIVE_DATA_URL = "/natives.json";
 
-const NATIVE_VERSION_URL = 'https://natives.altv.mp/version';
-const NATIVE_DATA_URL = 'https://natives.altv.mp/natives';
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     nativesCount: 0,
     nativesNamed: 0,
     nativesOrigNamed: 0,
     nativesByCat: {} as NativesByCat,
-    nativesByHash: {} as NativesByHash
+    nativesByHash: {} as NativesByHash,
   },
   mutations: {
     init(state, data) {
@@ -23,15 +25,15 @@ export default new Vuex.Store({
       state.nativesCount = data.nativesCount;
       state.nativesNamed = data.nativesNamed;
       state.nativesOrigNamed = data.nativesOrigNamed;
-    }
+    },
   },
   actions: {
     async load(ctx) {
       const response = await fetch(NATIVE_VERSION_URL);
       const realVersionJson: VersionInfo = await response.json();
-      const realVersion: number = realVersionJson.lastUpdate;
+      const realHash: string = realVersionJson.hash;
 
-      const nResponse = await fetch(`${NATIVE_DATA_URL}?v=${realVersion}`);
+      const nResponse = await fetch(`${NATIVE_DATA_URL}?hash=${realHash}`);
       const nativesByCat: NativeDb = await nResponse.json();
 
       let nativesCount = 0;
@@ -48,7 +50,7 @@ export default new Vuex.Store({
           if (native.name !== undefined && native.name.length > 0) {
             nativesNamed++;
             quality = 1;
-            if (native.name[0] !== '_') {
+            if (native.name[0] !== "_") {
               nativesOrigNamed++;
               quality = 2;
             }
@@ -64,12 +66,19 @@ export default new Vuex.Store({
         }
       }
 
-      ctx.commit('init', { nativesByCat, nativesByHash, nativesCount, nativesNamed, nativesOrigNamed });
+      ctx.commit("init", {
+        nativesByCat,
+        nativesByHash,
+        nativesCount,
+        nativesNamed,
+        nativesOrigNamed,
+      });
     },
     search(ctx, str: string) {
       const result: NativeAlt[] = [];
-      const strs = str.split(' ')
-        .flatMap((s: string) => s.split('_'))
+      const strs = str
+        .split(" ")
+        .flatMap((s: string) => s.split("_"))
         .filter((s: string) => s.length > 0)
         .map((s: string) => s.toLowerCase());
 
@@ -98,7 +107,11 @@ export default new Vuex.Store({
             if (!hashFound) {
               if (n.oldNames?.find((name) => name.toLowerCase().includes(s))) {
                 ++found;
-              } else if (n.old_names?.find((name) => name.toLowerCase().replace(/_/gm, '').includes(s))) {
+              } else if (
+                n.old_names?.find((name) =>
+                  name.toLowerCase().replace(/_/gm, "").includes(s),
+                )
+              ) {
                 ++found;
               }
             }
@@ -116,13 +129,12 @@ export default new Vuex.Store({
           }
         }
 
-
         if (count >= 200) {
           break;
         }
       }
 
       return result;
-    }
-  }
+    },
+  },
 });

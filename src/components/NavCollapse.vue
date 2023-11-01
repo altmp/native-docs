@@ -1,11 +1,17 @@
 <template>
   <div class="nav-collapse">
-    <div class="collapse-name" :class="{ opened: isOpened }" @click="toggle">
+    <div class="collapse-name" :class="{ opened: opened }" @click="toggle">
       <i class="icon-right-open" />
       <div class="name">{{ category }}</div>
     </div>
 
-    <div v-if="isOpened" :class="{'collapse-content': true, 'content-collapsed': this.opened === false }">
+    <div
+      v-if="opened"
+      :class="{
+        'collapse-content': true,
+        'content-collapsed': opened === false,
+      }"
+    >
       <native-list-item
         v-for="n in natives"
         :key="n.hash"
@@ -17,31 +23,35 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import NativeListItem from '@/components/NativeListItem.vue';
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import NativeListItem from "@/components/NativeListItem.vue";
 
-@Component({
-  components: {
-    NativeListItem
-  }
-})
-export default class NavCollapse extends Vue {
-  @Prop() private category!: string;
-  private isOpened: boolean = false;
+const store = useStore();
 
-  get opened(): boolean {
-    return this.isOpened;
-  }
+// Props declaration
+const props = defineProps({
+  category: {
+    type: String,
+    required: true,
+  },
+});
 
-  private get natives(): string[] {
-    return Object.values(this.$store.state.nativesByCat[this.category]);
-  }
+// State and computed values
+const isOpened = ref(false);
+const opened = computed(() => isOpened.value);
+const natives = computed(() => {
+  // Here you might need to access the store differently
+  // You can't directly access "this" context in <script setup>
+  // Consider injecting the store or importing it directly
+  return Object.values(store.state.nativesByCat[props.category]);
+});
 
-  private toggle() {
-    this.isOpened = !this.isOpened;
-  }
-}
+// Methods
+const toggle = () => {
+  isOpened.value = !isOpened.value;
+};
 </script>
 
 <style lang="scss" scoped>
@@ -65,7 +75,7 @@ $animTime: 50ms;
     i {
       padding: 2px 0;
       height: 16px;
-      transition: transform .1s ease;
+      transition: transform 0.1s ease;
     }
 
     &.opened i {
@@ -77,11 +87,11 @@ $animTime: 50ms;
       font-style: normal;
       font-weight: bold;
       font-size: 16px;
-      color: #FFFFFF;
+      color: #ffffff;
     }
 
     &:hover {
-      opacity: .7;
+      opacity: 0.7;
     }
   }
 
@@ -97,5 +107,4 @@ $animTime: 50ms;
     display: none;
   }
 }
-
 </style>

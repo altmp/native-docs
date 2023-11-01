@@ -1,19 +1,21 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/Home.vue';
+import { createRouter, createWebHistory } from "vue-router";
+import AppHome from "./views/AppHome.vue";
 
-Vue.use(Router);
+const routes = [
+  {
+    path: "/:hash?",
+    name: "home",
+    component: AppHome,
+    props: true,
+    meta: {
+      title: "alt:V / NativeDB",
+    },
+  },
+];
 
-export default new Router({
-  routes: [
-    {
-      path: '/:hash?',
-      name: 'home',
-      component: Home,
-      props: true,
-      meta: {
-        title: 'alt:V / NativeDB'
-      }
-    }
-  ],
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 });
+
+export default router;

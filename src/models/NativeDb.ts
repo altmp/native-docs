@@ -1,7 +1,7 @@
-import {Native, NativeAlt} from './Native';
+import { Native, NativeAlt } from "./Native";
 
 export interface VersionInfo {
-  lastUpdate: number;
+  hash: string;
 }
 
 export interface NativeDb {

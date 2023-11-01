@@ -1,22 +1,37 @@
 <template>
-  <router-link class="native-list-item" :to="{name: 'home', params: {hash}}">
-    <div :class="{'quality-circle': true, 
-      good: this.quality == 2, 
-      medium: this.quality == 1, 
-      low: this.quality == 0}"/>
+  <router-link
+    class="native-list-item"
+    :to="{ name: 'home', params: { hash } }"
+  >
+    <div
+      :class="{
+        'quality-circle': true,
+        good: quality == 2,
+        medium: quality == 1,
+        low: quality == 0,
+      }"
+    />
     <div class="native-name">{{ name }}</div>
   </router-link>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { defineProps } from "vue";
 
-@Component
-export default class NativeListItem extends Vue {
-  @Prop() private name!: string;
-  @Prop() private quality!: number;
-  @Prop() private hash!: string;
-}
+const { name, quality, hash } = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  quality: {
+    type: Number,
+    required: true,
+  },
+  hash: {
+    type: String,
+    required: true,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -42,15 +57,15 @@ export default class NativeListItem extends Vue {
   }
 
   .good {
-    background: #4DBF60;
+    background: #4dbf60;
   }
 
   .medium {
-    background: #CE8B09;
+    background: #ce8b09;
   }
 
   .low {
-    background: #BF544D;
+    background: #bf544d;
   }
 
   .native-name {

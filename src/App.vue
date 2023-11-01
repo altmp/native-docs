@@ -1,24 +1,26 @@
 <template>
   <div id="app">
-    <my-header/>
-    <router-view/>
+    <my-header />
+    <router-view />
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import MyHeader from '@/components/Header.vue';
+<script setup lang="ts">
+import MyHeader from "@/components/AppHeader.vue";
+</script>
 
-@Component({
+<script lang="ts">
+export default {
+  name: "App",
   components: {
     MyHeader,
   },
-})
-export default class App extends Vue {}
+};
 </script>
 
 <style lang="scss">
-body, html {
+body,
+html {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -26,16 +28,21 @@ body, html {
 }
 
 body {
-  background: url('~@/assets/back.png') no-repeat center/cover;
+  background: url("@/assets/back.png") no-repeat center/cover;
 }
 
 #app {
   display: flex;
   flex-direction: column;
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+  font-family:
+    "Roboto",
+    -apple-system,
+    BlinkMacSystemFont,
+    Helvetica,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #FFF;
+  color: #fff;
   width: 100%;
   height: 100%;
 }
