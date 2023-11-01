@@ -17,7 +17,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(to, from, next);
   const hashRedirect = /#\/(.*)$/.exec(to.fullPath);
   if (hashRedirect) {
     const path = hashRedirect[1];
