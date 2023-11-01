@@ -18,4 +18,17 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  console.log(to, from, next);
+  const hashRedirect = /#\/(.*)$/.exec(to.fullPath);
+  if (hashRedirect) {
+    console.log(hashRedirect);
+    const path = hashRedirect[1];
+    console.log(path);
+    return next({ path: `/${path}` });
+  } else {
+    return next();
+  }
+});
+
 export default router;
