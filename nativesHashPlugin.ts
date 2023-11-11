@@ -61,7 +61,7 @@ function getHandledNatives(nativesContent: string): unknown {
       for (let i = 0; i < native.params.length; ++i) {
         const param = native.params[i];
         if (param.name === "var") param.name = "unkVar";
-        param.ref = param.type.includes("*");
+        param.ref = param.type.includes("*") && !param.type.includes("char");
         const jsType = getJSType(param.type);
         param.type = jsType;
       }
